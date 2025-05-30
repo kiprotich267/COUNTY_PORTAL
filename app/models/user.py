@@ -23,12 +23,15 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime(), default=db.func.current_timestamp())
 
     #flask-security required field for tokens, session, password management
-    fs_uniquifier = db.Column(db.String(255), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
+    fs_uniquifier = db.Column(db.String(36), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
 # tracking fields
 # TODO :
 
 # relationships
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))
+
+    def __repr__(self):
+        return f'<User {self.email}>'
 
 class Role(db.Model, RoleMixin):
     __tablename__ = 'roles'
